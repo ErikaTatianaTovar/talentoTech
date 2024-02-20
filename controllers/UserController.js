@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 class UserController {
-
-    constructor(){}
+   
+    constructor(){ this.jwtSecret  = process.env.JWT_SECRET || '';}
 
     async login(email, password){
         try {
