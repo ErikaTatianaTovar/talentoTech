@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const UserSchema = require('../models/User');
 const UserController = require('../controllers/UserController'); //Importando el controllador
 const userController = new UserController(); // creando una instancia de ese controlador
+const multer = require('multer');
 
 router.get('/user', userController.validateToken, async (req, res) => {
     //Traer todos los usuarios
@@ -104,5 +105,46 @@ router.post('/login', (req, res) => {
         res.send(result)
     })
 })
+//configuracion de libreria multer
 
+const storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, 'uploads/')
+    },
+    filename: function(req, file, cb){
+        cb(null, Date.now() + '-' + file.originalname)
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    if(file.mimetype.startsWith('image/')){
+        cb(null, true)
+    }else{
+        cb(new Error('El archivo no es una imagen'))
+    }
+
+}
+
+const upload = multer({ storage: storage, fileFilter: fileFilter})
+//Servicio web para el almacenamiento de archivos
+router.post('/upload/:id/user', upload.single('file'), (req, res) => {
+    if(!req.file){
+        return res.status(400).send({'status': 'error', 'message': 'No se proporciono ningun archivo'})
+    }
+
+    var id = req.params.id
+
+    var updateUser = {
+        avatar: req.file.path,
+    }
+
+    UserSchema.findByIdAndUpdate(id, updateUser, {new: true}).then((result) => {
+        res.send({"status": "success", "message": "Archivo subido correctamente"})
+    }).catch((error) => {
+        console.log(error)
+        res.send({"status": "success", "message":"Error actualizando el registro"})
+    })
+
+})
+router.post('/upload', )
 module.exports = router

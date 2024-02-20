@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const UserSchema = require('../models/User')
 const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 class UserController {
 

@@ -23,6 +23,7 @@ router.get('/', (req, res) => {
 
 //Ejecuto el servidor
 app.use(router)
+app.use('/uploads', express.static('uploads'));
 app.use('/', userRoutes)
 app.listen(port, () => {
     console.log('Listen on ' + port)
