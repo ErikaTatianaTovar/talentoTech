@@ -25,25 +25,30 @@ router.get('/user/:id', async (req, res) => {
 
 router.post('/user', async (req, res) => {
     //Crear un usuario
-    const hashedPassword = await bcrypt.hash(req.body.password, 10)
-
-    let user = UserSchema({
-        name: req.body.name,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        id: req.body.id,
-        password: hashedPassword
-    })
-
-    user.save().then((result) => {
-        res.send(result)
-    }).catch((err) => {
-        if(err.code == 11000){
-            res.send({"status" : "error", "message" :"El correo ya fue registrado"})      
-        }else{
-            res.send({"status" : "error", "message" :err.message})      
+   
+    await bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+        if (err) {
+            res.send({"status" : "error", "message" :err.message})
+        } else {
+            let user = UserSchema({
+                name: req.body.name,
+                lastname: req.body.lastname,
+                email: req.body.email,
+                id: req.body.id,
+                password: hashedPassword
+            })
+        
+            user.save().then((result) => {
+                res.send(result)
+            }).catch((err) => {
+                if(err.code == 11000){
+                    res.send({"status" : "error", "message" :"El usuario ya fue registrado"})      
+                }else{
+                    res.send({"status" : "error", "message" :err.message})      
+                }
+            })
         }
-    })
+    });
 })
 
 router.patch('/user/:id', (req, res) => {
@@ -109,7 +114,7 @@ router.post('/login', (req, res) => {
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, 'uploads/')
+        cb(null, 'uploads/user')
     },
     filename: function(req, file, cb){
         cb(null, Date.now() + '-' + file.originalname)
@@ -146,5 +151,4 @@ router.post('/upload/:id/user', upload.single('file'), (req, res) => {
     })
 
 })
-router.post('/upload', )
 module.exports = router

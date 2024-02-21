@@ -10,6 +10,7 @@ const mongoose = require('mongoose'); // Importo la libreria mongoose
 mongoose.connect(DB_URL) // Creo la cadena de conexion
 
 const userRoutes = require('./routes/UserRoutes');
+const housingRoutes = require('./routes/HousingRoutes');
 
 app.use(express.urlencoded({extended: true})) // Acceder a la informacion de las urls
 app.use(express.json()) // Analizar informacion en formato JSON
@@ -23,8 +24,10 @@ router.get('/', (req, res) => {
 
 //Ejecuto el servidor
 app.use(router)
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads/user', express.static('uploads/user'));
 app.use('/', userRoutes)
+app.use('/uploads/housing', express.static('uploads/housing'));
+app.use('/', housingRoutes)
 app.listen(port, () => {
     console.log('Listen on ' + port)
 })
