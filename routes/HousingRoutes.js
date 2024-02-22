@@ -5,9 +5,9 @@
 const express = require('express');
 const router = express.Router();
 const HousingSchema = require('../models/Housing');
-const HousingController = require('../controllers/HousingController'); //Importando el controllador
+/*const HousingController = require('../controllers/HousingController'); //Importando el controllador
 const housingController = new HousingController(); // creando una instancia de ese controlador
-
+*/
 router.get('/housing', async (req, res) => {
     //Traer todas las casas
     await HousingSchema.find().then((housing) => {
@@ -55,10 +55,10 @@ router.post('/housing', async (req, res) => {
         })
     })
 
-    router.patch('/housing/:code', (req, res) => {
+    router.patch('/housing/:id', (req, res) => {
         //Actualizar una casa
         // Cuando viene por la url del servicio web params
-        var code = req.params.code
+        var id = req.params.id
         
         let updateHousing = {
             type: req.body.type,
@@ -74,11 +74,11 @@ router.post('/housing', async (req, res) => {
             //image: req.body.image
         }
     
-        HousingSchema.findOne({code: code}, updateHousing, {new: true}).then((result) => {
+        HousingSchema.findOne({_id: id}, updateHousing, {new: true}).then((result) => {
             res.send({result ,"status": "success", "message": "Vivienda actualizada con éxito"})
         }).catch((error) => {
             console.log(error)
-            res.send("Error actualizando el registro" + error.message)
+            res.send("Error actualizando el registro: " + error.message)
         })
     })
 
@@ -94,7 +94,7 @@ router.post('/housing', async (req, res) => {
         })
     })
 
-    const storage = multer.diskStorage({
+    /*const storage = multer.diskStorage({
         destination: function(req, file, cb){
             cb(null, 'uploads/housing')
         },
@@ -131,7 +131,6 @@ router.post('/housing', async (req, res) => {
             console.log(error)
             res.send({"status": "success", "message":"Error actualizando el registro"})
         })
-    
-    })
+    })*/
     
     module.exports = router
