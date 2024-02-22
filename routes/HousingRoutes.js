@@ -55,10 +55,10 @@ router.post('/housing', async (req, res) => {
         })
     })
 
-    router.patch('/housing/:id', (req, res) => {
+    router.patch('/housing/:code', (req, res) => {
         //Actualizar una casa
         // Cuando viene por la url del servicio web params
-        var id = req.params.id
+        var code = req.params.code
         
         let updateHousing = {
             type: req.body.type,
@@ -73,8 +73,7 @@ router.post('/housing', async (req, res) => {
             parking: req.body.parking,
             //image: req.body.image
         }
-    
-        HousingSchema.findOne({_id: id}, updateHousing, {new: true}).then((result) => {
+        HousingSchema.findOneAndUpdate({code: code}, updateHousing, {new: true}).then((result) => {
             res.send({result ,"status": "success", "message": "Vivienda actualizada con éxito"})
         }).catch((error) => {
             console.log(error)
