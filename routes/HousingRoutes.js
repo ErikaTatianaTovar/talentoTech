@@ -1,13 +1,13 @@
 //preguntar al profesor si es mejor usar un put o un post para agregar en bd y cual es la diferencia
 //el codigo sea de cuatro letras y cuatro numeros y lo genere automaticamente
-//la imagen se guarde en uploads housing
 
 const express = require('express');
 const router = express.Router();
 const HousingSchema = require('../models/Housing');
-/*const HousingController = require('../controllers/HousingController'); //Importando el controllador
-const housingController = new HousingController(); // creando una instancia de ese controlador
-*/
+const multer = require('multer');
+//const {HousingController,upload} = require('../controllers/HousingController');//Importando el controllador
+
+
 router.get('/housing', async (req, res) => {
     //Traer todas las casas
     await HousingSchema.find().then((housing) => {
@@ -71,7 +71,7 @@ router.post('/housing', async (req, res) => {
             rooms: req.body.rooms,
             bathrooms: req.body.bathrooms,
             parking: req.body.parking,
-            //image: req.body.image
+            image: req.body.image
         }
         HousingSchema.findOneAndUpdate({code: code}, updateHousing, {new: true}).then((result) => {
             res.send({result ,"status": "success", "message": "Vivienda actualizada con éxito"})
@@ -93,43 +93,46 @@ router.post('/housing', async (req, res) => {
         })
     })
 
-    /*const storage = multer.diskStorage({
-        destination: function(req, file, cb){
-            cb(null, 'uploads/housing')
-        },
-        filename: function(req, file, cb){
-            cb(null, Date.now() + '-' + file.originalname)
-        }
-    });
-    
-    const fileFilter = (req, file, cb) => {
-        if(file.mimetype.startsWith('image/')){
-            cb(null, true)
-        }else{
-            cb(new Error('El archivo no es una imagen'))
-        }
-    
+    //configuracion de libreria multer
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb){
+        cb(null, 'uploads/housing')
+    },
+    filename: function(req, file, cb){
+        cb(null, Date.now() + '-' + file.originalname)
     }
+});
+
+const fileFilter = (req, file, cb) => {
+    if(file.mimetype.startsWith('image/')){
+        cb(null, true)
+    }else{
+        cb(new Error('El archivo no es una imagen'))
+    }
+
+}
+
+const upload = multer({ storage: storage, fileFilter: fileFilter})
+//Servicio web para el almacenamiento de archivos
+router.post('/upload/:code/housing', upload.single('file'), (req, res) => {
+    if(!req.file){
+        return res.status(400).send({'status': 'error', 'message': 'No se proporciono ningun archivo'})
+    }
+
+    var code = req.params.code
+
+    var updateHousing = {
+        avatar: req.file.path,
+    }
+
+    HousingSchema.findOneAndUpdate({ code: code }, updateHousing, {new: true}).then((result) => {
+        res.send({"status": "success", "message": "Archivo subido correctamente" + result})
+    }).catch((error) => {
+        console.log(error)
+        res.send({"status": "error", "message":"Error actualizando el registro"})
+    })
+
+})
     
-    const upload = multer({ storage: storage, fileFilter: fileFilter})
-    //Servicio web para el almacenamiento de archivos
-    router.post('/upload/:code/housing', upload.single('file'), (req, res) => {
-        if(!req.file){
-            return res.status(400).send({'status': 'error', 'message': 'No se proporciono ningun archivo'})
-        }
-    
-        var code = req.params.code
-    
-        var updateHousing = {
-            avatar: req.file.path,
-        }
-    
-        HousingSchema.findOne(code, updateHousing, {new: true}).then((result) => {
-            res.send({"status": "success", "message": "Archivo subido correctamente"})
-        }).catch((error) => {
-            console.log(error)
-            res.send({"status": "success", "message":"Error actualizando el registro"})
-        })
-    })*/
-    
-    module.exports = router
+    module.exports = router;

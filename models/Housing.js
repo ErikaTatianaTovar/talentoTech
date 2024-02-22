@@ -25,7 +25,6 @@ const HousingSchema = new mongoose.Schema({
                 // Validacion del departamento
                 var response = await fetch( 'https://api-colombia.com/api/v1/Department');
                 var departments = await response. json()
-                console. log (departments)
                 return departments. some (department => department.name.toUpperCase().includes(state.toUpperCase()));
             },
                 message: props => '$(props.value) no es un Departamento de Colombia!'
@@ -40,7 +39,6 @@ const HousingSchema = new mongoose.Schema({
                 // Validacion del departamento
                 var response = await fetch( 'https://api-colombia.com/api/v1/Department');
                 var cities = await response. json()
-                console. log (cities)
                 return cities. some (object => object.name.toUpperCase().includes(city.toUpperCase()));
             },
                 message: props => '$(props.value) no es una ciudad de Colombia!'
@@ -49,12 +47,6 @@ const HousingSchema = new mongoose.Schema({
     address: {
         type: String, 
         required: true,
-       /* validate: {
-            validator: function(address) {    
-              return /^(CL(LE)?|C(?:RA?|ARRERA)|DG|DIAG|TV|TRAN(?:S(?:V|VERSAL)?|V)|AV(?:ENIDA)?(?:\s+(?:CALLE|CARRERA))?)\s([1-9][0-9]?)\s?([a-zA-Z]?){1,5}(\#?\s?\d[1-9][0-9]?)\s([a-zA-Z]?){1,5}?$/i.test(address);
-            },
-            message: props => `${props.value} no es una dirección válida!`
-          }*/
     },
     zip_code: {
         type: Number, 
@@ -88,7 +80,6 @@ const HousingSchema = new mongoose.Schema({
     },
     image: {
         type: String, 
-       // required: true,
         validate: {
             validator: function(image) {            
                 return /\.(jpg|jpeg|png|svg)$/i.test(image);
