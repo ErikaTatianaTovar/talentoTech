@@ -30,7 +30,6 @@ router.get('/housing/:code', async (req, res) => {
 
 router.post('/housing', async (req, res) => {
     //Crear una vivienda
-    try{
     let housing = HousingSchema({
         type: req.body.type,
         state: req.body.state,
@@ -45,17 +44,16 @@ router.post('/housing', async (req, res) => {
         code: req.body.code
         //image: req.body.image
     })
-    await housing.save();
-    res.status(201).send(housing);
-} catch (err) {
-    if (err.code === 11000 && err.keyPattern && err.keyPattern.code) {
-        // Si el código está duplicado
-        return res.status(400).send({ error: 'El código de vivienda ya existe. Intente nuevamente.' });
-    } else {
-        res.status(500).send({ error: 'Error al crear vivienda: ' + err.message });
-    }
-}
-});
+    housing.save().then((result) => {
+        res.send(result)
+    }).catch((err) => {
+        if (err.code == 11000) {
+            res.send({ "status": "susessful", "message": "La vivienda ya fue registrada: " + err.message })
+        } else {
+            res.send({ "status": "error", "message": err.message })
+        }
+    })
+})
 
 router.patch('/housing/:code', (req, res) => {
     //Actualizar una casa

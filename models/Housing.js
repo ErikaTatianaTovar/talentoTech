@@ -88,5 +88,13 @@ const HousingSchema = new mongoose.Schema({
         },
     }
 })
+HousingSchema.pre('save', function (next) {
+    if (!this.code) {
+        this.code = CodeGenerator.generateUniqueCode();
+    }
+    next();
+});
 
-module.exports = mongoose.model('housing', HousingSchema) 
+
+module.exports = mongoose.model('housing', HousingSchema);
+module.exports = Housing;
