@@ -3,89 +3,89 @@ const mongoose = require('mongoose') // Importando la libreria
 // Creando el modelo de housing
 const HousingSchema = new mongoose.Schema({
     code: {
-        type: String, 
-       // required: true,
-       // unique: true
+        type: String,
+        // required: true,
+        // unique: true
     },
     type: {
-        type: String, 
+        type: String,
         required: true,
         validate: {
-            validator: function(type) {            
-              return /^(casa|apartamento|finca|edificio|oficina)$/i.test(type);
+            validator: function (type) {
+                return /^(casa|apartamento|finca|edificio|oficina)$/i.test(type);
             },
             message: props => `${props.value} no es un tipo de vivienda válido!`
-          }
+        }
     },
     state: {
-        type: String, 
+        type: String,
         required: true,
         validate: {
-            validator: async function(state) {
+            validator: async function (state) {
                 // Validacion del departamento
-                var response = await fetch( 'https://api-colombia.com/api/v1/Department');
-                var departments = await response. json()
-                return departments. some (department => department.name.toUpperCase().includes(state.toUpperCase()));
+                var response = await fetch('https://api-colombia.com/api/v1/Department');
+                var departments = await response.json()
+                return departments.some(department => department.name.toUpperCase().includes(state.toUpperCase()));
             },
-                message: props => '$(props.value) no es un Departamento de Colombia!'
+            message: props => '$(props.value) no es un Departamento de Colombia!'
         }
 
     },
     city: {
-        type: String, 
+        type: String,
         required: true,
         validate: {
-            validator: async function(city) {
+            validator: async function (city) {
                 // Validacion del departamento
-                var response = await fetch( 'https://api-colombia.com/api/v1/Department');
-                var cities = await response. json()
-                return cities. some (object => object.name.toUpperCase().includes(city.toUpperCase()));
+                var response = await fetch('https://api-colombia.com/api/v1/Department');
+                var cities = await response.json()
+                return cities.some(object => object.name.toUpperCase().includes(city.toUpperCase()));
             },
-                message: props => '$(props.value) no es una ciudad de Colombia!'
+            message: props => '$(props.value) no es una ciudad de Colombia!'
         }
     },
     address: {
-        type: String, 
+        type: String,
         required: true,
     },
     zip_code: {
-        type: Number, 
+        type: Number,
         required: true,
     },
     price: {
-        type: Number, 
+        type: Number,
         required: true,
         validate: {
-            validator: function(price) {            
+            validator: function (price) {
                 return /^(?!0*(?:[.,]0*)?$)(?:\d+|[1-9]\d{0,2}(?:([.,]\d{3})*|\d*))([.,]\d+)?$|^1000000([.,]0+)?$/.test(price);
-        },
-        message: props => `${props.value} no es un precio válido!`
+            },
+            message: props => `${props.value} no es un precio válido!`
         }
     },
     size: {
-        type: Number, 
+        type: Number,
         required: true,
     },
     rooms: {
-        type: Number, 
+        type: Number,
         required: true,
     },
     bathrooms: {
-        type: Number, 
+        type: Number,
         required: true,
     },
     parking: {
-        type: Boolean, 
+        type: Boolean,
         required: true,
     },
     image: {
-        type: String, 
+        type: String,
         validate: {
-            validator: function(image) {            
+            validator: function (image) {
                 return /\.(jpg|jpeg|png|svg)$/i.test(image);
             },
             message: props => `${props.value} no es un formato de imagen válido!`
-            },
+        },
     }
 })
 

@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
+const UserSchema = require('./User');
 
 const MessageSchema = new mongoose.Schema({
     body: {
@@ -17,11 +18,10 @@ const MessageSchema = new mongoose.Schema({
     },
     readed: {
         type: Boolean,
-        required: true,
         default: false
     }
-
-},{
+}, {
     timestamps: true
 })
-module.exports = mongoose.model('Message', MessageSchema)
+
+module.exports = mongoose.model('message', MessageSchema)

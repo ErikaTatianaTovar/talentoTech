@@ -13,7 +13,7 @@ router.get('/housing', async (req, res) => {
     await HousingSchema.find().then((housing) => {
         res.json(housing)
     }).catch((err) => {
-        res.send({"status" : "error", "message" :err.message})
+        res.send({ "status": "error", "message": err.message })
     })
 })
 
@@ -21,103 +21,103 @@ router.get('/housing/:code', async (req, res) => {
     //Traer una casa especifica pasando el code
     var code = req.params.code
 
-    await HousingSchema.findOne({code: code}).then((housing) => {
+    await HousingSchema.findOne({ code: code }).then((housing) => {
         res.json(housing)
     }).catch((err) => {
-        res.send({"status" : "error", "message" :err.message})
+        res.send({ "status": "error", "message": err.message })
     })
 })
 
 router.post('/housing', async (req, res) => {
     //Crear una vivienda
-        let housing = HousingSchema({
-            type: req.body.type,
-            state: req.body.state,
-            city: req.body.city,
-            address: req.body.address,
-            zip_code: req.body.zip_code,
-            price: req.body.price,
-            size: req.body.size,
-            rooms: req.body.rooms,
-            bathrooms: req.body.bathrooms,
-            parking: req.body.parking,
-            code: req.body.code
-            //image: req.body.image
-        })
-        housing.save().then((result) => {
-            res.send(result)
-        }).catch((err) => {
-            if(err.code == 11000){
-                res.send({"status" : "susessful", "message" : "La vivienda ya fue registrada: " + err.message })
-            }else{
-            res.send({"status" : "error", "message" :err.message})
-            }
-        })
+    let housing = HousingSchema({
+        type: req.body.type,
+        state: req.body.state,
+        city: req.body.city,
+        address: req.body.address,
+        zip_code: req.body.zip_code,
+        price: req.body.price,
+        size: req.body.size,
+        rooms: req.body.rooms,
+        bathrooms: req.body.bathrooms,
+        parking: req.body.parking,
+        code: req.body.code
+        //image: req.body.image
     })
-
-    router.patch('/housing/:code', (req, res) => {
-        //Actualizar una casa
-        // Cuando viene por la url del servicio web params
-        var code = req.params.code
-        
-        let updateHousing = {
-            type: req.body.type,
-            state: req.body.state,
-            city: req.body.city,
-            address: req.body.address,
-            zip_code: req.body.zip_code,
-            price: req.body.price,
-            size: req.body.size,
-            rooms: req.body.rooms,
-            bathrooms: req.body.bathrooms,
-            parking: req.body.parking,
-            image: req.body.image
+    housing.save().then((result) => {
+        res.send(result)
+    }).catch((err) => {
+        if (err.code == 11000) {
+            res.send({ "status": "susessful", "message": "La vivienda ya fue registrada: " + err.message })
+        } else {
+            res.send({ "status": "error", "message": err.message })
         }
-        HousingSchema.findOneAndUpdate({code: code}, updateHousing, {new: true}).then((result) => {
-            res.send({result ,"status": "success", "message": "Vivienda actualizada con éxito"})
-        }).catch((error) => {
-            console.log(error)
-            res.send("Error actualizando el registro: " + error.message)
-        })
     })
+})
 
-    router.delete('/housing/:code', (req, res) => {
-    
-        var code = req.params.code
-    
-        HousingSchema.deleteOne({code: code}).then(() => {
-            res.json({"status": "success", "message": "Vivienda eliminada correctamente"})
-        }).catch((error) => {
-            console.log(error)
-            res.json({"status": "failed", "message": "Error eliminando vivienda" + err.message})
-        })
+router.patch('/housing/:code', (req, res) => {
+    //Actualizar una casa
+    // Cuando viene por la url del servicio web params
+    var code = req.params.code
+
+    let updateHousing = {
+        type: req.body.type,
+        state: req.body.state,
+        city: req.body.city,
+        address: req.body.address,
+        zip_code: req.body.zip_code,
+        price: req.body.price,
+        size: req.body.size,
+        rooms: req.body.rooms,
+        bathrooms: req.body.bathrooms,
+        parking: req.body.parking,
+        image: req.body.image
+    }
+    HousingSchema.findOneAndUpdate({ code: code }, updateHousing, { new: true }).then((result) => {
+        res.send({ result, "status": "success", "message": "Vivienda actualizada con éxito" })
+    }).catch((error) => {
+        console.log(error)
+        res.send("Error actualizando el registro: " + error.message)
     })
+})
 
-    //configuracion de libreria multer
+router.delete('/housing/:code', (req, res) => {
+
+    var code = req.params.code
+
+    HousingSchema.deleteOne({ code: code }).then(() => {
+        res.json({ "status": "success", "message": "Vivienda eliminada correctamente" })
+    }).catch((error) => {
+        console.log(error)
+        res.json({ "status": "failed", "message": "Error eliminando vivienda" + err.message })
+    })
+})
+
+//configuracion de libreria multer
 
 const storage = multer.diskStorage({
-    destination: function(req, file, cb){
+    destination: function (req, file, cb) {
         cb(null, 'uploads/housing')
     },
-    filename: function(req, file, cb){
+    filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname)
     }
 });
 
 const fileFilter = (req, file, cb) => {
-    if(file.mimetype.startsWith('image/')){
+    if (file.mimetype.startsWith('image/')) {
         cb(null, true)
-    }else{
+    } else {
         cb(new Error('El archivo no es una imagen'))
     }
 
 }
 
-const upload = multer({ storage: storage, fileFilter: fileFilter})
+const upload = multer({ storage: storage, fileFilter: fileFilter })
 //Servicio web para el almacenamiento de archivos
 router.post('/upload/:code/housing', upload.single('file'), (req, res) => {
-    if(!req.file){
-        return res.status(400).send({'status': 'error', 'message': 'No se proporciono ningun archivo'})
+    if (!req.file) {
+        return res.status(400).send({ 'status': 'error', 'message': 'No se proporciono ningun archivo' })
     }
 
     var code = req.params.code
@@ -126,13 +126,13 @@ router.post('/upload/:code/housing', upload.single('file'), (req, res) => {
         avatar: req.file.path,
     }
 
-    HousingSchema.findOneAndUpdate({ code: code }, updateHousing, {new: true}).then((result) => {
-        res.send({"status": "success", "message": "Archivo subido correctamente" + result})
+    HousingSchema.findOneAndUpdate({ code: code }, updateHousing, { new: true }).then((result) => {
+        res.send({ "status": "success", "message": "Archivo subido correctamente" + result })
     }).catch((error) => {
         console.log(error)
-        res.send({"status": "error", "message":"Error actualizando el registro"})
+        res.send({ "status": "error", "message": "Error actualizando el registro" })
     })
 
 })
-    
-    module.exports = router;
+
+module.exports = router;
