@@ -96,5 +96,4 @@ HousingSchema.pre('save', function (next) {
 });
 
 
-module.exports = mongoose.model('housing', HousingSchema);
-module.exports = Housing;
+module.exports = mongoose.model('housing', HousingSchema); 

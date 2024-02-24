@@ -26,25 +26,31 @@ router.get('/', (req, res) => {
     //Informacion a modificar
     res.send("Hello world")
 })
-//metodos websockets
-io.on('connect', (socket) => {
-    console.log("Connected")
 
+/** Metodos websocket */
+io.on('connect', (socket) => {
+    console.log("connected")
+    //Escuchando eventos desde el servidor
     socket.on('message', (data) => {
-        var payload = JSON.parse(data);
+        /** Almacenando el mensaje en la BD */
+        var payload = JSON.parse(data)
         console.log(payload)
+        /** Lo almaceno en la BD */
         MessageSchema(payload).save().then((result) => {
-            socket.emit('message-receipt', { 'message': 'Mensaje almacenado' })
+            /** Enviando el mensaje a todos los clientes conectados al websocket */
+            socket.broadcast.emit('message-receipt', payload)
         }).catch((err) => {
-            console.log({ status: "error", message: err.message })
-        })
+            console.log({"status" : "error", "message" :err.message})
+        })        
     })
 
-    socket.on('disconnected', (socket) => {
-        console.log("disconnected")
+    socket.on('disconnect', (socket) => {
+        console.log("disconnect")    
     })
 })
-app.use(express.urlencoded({ extended: true })) // Acceder a la informacion
+
+/** Configuraciones express */
+app.use(express.urlencoded({extended: true})) // Acceder a la informacion de las urls
 app.use(express.json()) // Analizar informacion en formato JSON
 app.use((req, res, next) => {
     res.io = io
