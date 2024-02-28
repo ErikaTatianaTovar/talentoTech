@@ -6,7 +6,7 @@ const UserController = require('../controllers/UserController'); //Importando el
 const userController = new UserController(); // creando una instancia de ese controlador
 const multer = require('multer');
 
-router.get('/user', userController.validateToken, async (req, res) => {
+router.get('/user',/* userController.validateToken,*/ async (req, res) => {
     //Traer todos los usuarios
     let users = await UserSchema.find();
     res.json(users)
