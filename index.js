@@ -73,3 +73,5 @@ app.use('/', messageRoutes)
 http.listen(port, () => {
     console.log('Listen on ' + port)
 })
+
+module.exports = http

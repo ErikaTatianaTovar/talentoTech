@@ -24,19 +24,14 @@ const User = new GraphQLObjectType({
 const Message = new GraphQLObjectType({
     name: 'Message',
     fields: {
-        _id: { type: GraphQLID },
-        body: { type: GraphQLString },
-        from: {
-            type: User,
-            resolve: (parent, args) => { return parent; }
-        },
-        to: {
-            type: User,
-            resolve: (parent, args) => { return parent; }
-        },
-        readed: { type: GraphQLBoolean }
+      _id: { type: GraphQLString},
+      body: { type: GraphQLString},
+      from: { type: User},
+      to: { type: User},
+      readed: {type: GraphQLBoolean}
     }
-})
+  })
+  
 
 const Housing = new GraphQLObjectType({
     name: 'House',
@@ -58,6 +53,7 @@ const Housing = new GraphQLObjectType({
 const UserFilterInput = new GraphQLInputObjectType({
     name: 'UserFilterInput',
     fields: {
+        id: { type: GraphQLID },
         name: { type: GraphQLString },
         lastname: { type: GraphQLString },
         email: { type: GraphQLString },
@@ -65,14 +61,14 @@ const UserFilterInput = new GraphQLInputObjectType({
     }
 })
 
-const MessageByUserInput = new GraphQLInputObjectType({
+const MessageFilterInput = new GraphQLInputObjectType({
     name: 'MessageFilterInput',
     fields: {
-        body: { type: GraphQLString },
-        from: { User },
-        to: { User }
+      body: {type: GraphQLString},
+      from: {type: GraphQLString},
+      to: {type: GraphQLString}
     }
-})
+  })
 
 const HousingFilterInput = new GraphQLInputObjectType({
     name: 'HousingFilterInput',
@@ -128,9 +124,17 @@ const queryType = new GraphQLObjectType({
             resolve: resolvers.Messages,
         },
 
-        messagesByUser: {
+        MessagesByFilter: {
             type: new GraphQLList(Message),
-            resolve: resolvers.messagesByUser,
+            resolve: resolvers.MessagesByFilter,
+            args: {
+              filter: { type: MessageFilterInput }
+            }
+        },
+
+        MessagesByUser: {
+            type: new GraphQLList(Message),
+            resolve: resolvers.MessagesByUser,
             args: {
                 userId: { type: GraphQLID }
             }

@@ -73,8 +73,33 @@ const resolvers = {
             console.log(e)
         }
     },
+MessagesByFilter: async (_, {filter}) => {
+    try{
+        let query = {};
+        if(filter){
+        if(filter.from){
+            query = {from: filter.from}
+        }
+        if(filter.to){
+            query = {to: filter.to}
+        }
+        if(filter.body){
+            query.body = {$regex: filter.body, $options: 'i'}
+        }
+        const messages = await MessageSchema.find(query).populate('from')
+        .populate ({
+            path: 'to',
+            select: '-password'
+        })
+        return messages;
+    }
+    }catch(e){
+        console.log("Error buscando mensajes por filtro: ", e)
+    }
 
-messagesByUser: async (_,{ userId }) => {
+},
+
+MessagesByUser: async (_,{ userId }) => {
     try {
         const user = await UserSchema.findById(userId);
 

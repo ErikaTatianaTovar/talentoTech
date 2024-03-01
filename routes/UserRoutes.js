@@ -107,8 +107,12 @@ router.post('/login', (req, res) => {
     const password = req.body.password;
 
     userController.login(email, password).then((result) => {
-        res.send(result)
-    })
+        if (result == "success") {
+        res.status(401).send(result)
+        } else {
+        res.send({ "status": "error", "message": error.message }) 
+    }
+});
 })
 //configuracion de libreria multer
 
