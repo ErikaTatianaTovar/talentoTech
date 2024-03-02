@@ -20,6 +20,7 @@ mongoose.connect(DB_URL) // Creo la cadena de conexion
 const userRoutes = require('./routes/UserRoutes');
 const housingRoutes = require('./routes/HousingRoutes');
 const messageRoutes = require('./routes/MessageRoutes');
+const departmentRoutes = require('./read_file');
 
 const MessageSchema = require('./models/Message');
 
@@ -70,6 +71,7 @@ app.use('/', userRoutes)
 app.use('/uploads/housing', express.static('uploads/housing'));
 app.use('/', housingRoutes)
 app.use('/', messageRoutes)
+app.use('/', departmentRoutes)
 http.listen(port, () => {
     console.log('Listen on ' + port)
 })
