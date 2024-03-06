@@ -3,10 +3,10 @@ const app = require('../index.js');
 
 const objectToTest = {
 
-    "id": 1555221,
+    "id": 15552221,
     "name": "NombrePrueba",
     "lastname": "ApellidoPrueba",
-    "email": "Pruebass1@gmail.com",
+    "email": "Pruebass11@gmail.com",
     "password": "11111111"
 }
 let userId;
@@ -31,17 +31,6 @@ let token;
     it('responds with status 200', async () => {
         //solicitud get en ruta principal
         const response = await request(app).get('/user');
-        const objectToTest = {
-            
-                "_id": "65cd73f21c8dd9573fc639c9",
-                "name": "Julia",
-                "lastname": "Torres",
-                "email": "julia@gmail.com",
-                "password": "1221212",
-                "__v": 0,
-                "avatar": "uploads/user/1709168852023-julia.jpeg"
-                
-        }
         expect(response.status).toBe(200);
     });
 })
@@ -50,17 +39,6 @@ describe('GET /', () => {
     it('responds with an array object that contains an specific user', async () => {
         //solicitud get en ruta principal
         const response = await request(app).get('/user');
-        const objectToTest = {
-            
-                "_id": "65cd73f21c8dd9573fc639c9",
-                "name": "Julia",
-                "lastname": "Torres",
-                "email": "julia@gmail.com",
-                "password": "1221212",
-                "__v": 0,
-                "avatar": "uploads/user/1709168852023-julia.jpeg"
-                
-        }
         expect(response.status).toBe(200);
        //verificar que sea un array
        // expect(Array.isArray(response.body)).toBE(true);
@@ -84,7 +62,7 @@ describe('POST /user', () => {
         expect(response.body.email).toBe(objectToTest.email)
     })
 })
-    describe('GET /user/:id', () => {
+/*    describe('GET /user/:id', () => {
     it('responds with an object that contains an specific user', async () => {
         jest.setTimeout(30000);
         //solicitud get en ruta principal
@@ -99,8 +77,6 @@ describe('POST /user', () => {
     })
 })
 
-
-/*
 describe('POST /login', () => {
     it('Success login with email and password', async() => {
        

@@ -29,6 +29,10 @@ router.get('/housing/:code', async (req, res) => {
 })
 
 router.post('/housing', async (req, res) => {
+    const existingHousing = await HousingSchema.findOne({ code: CodeGenerator.generateUniqueCode() });
+    if (existingHousing) {
+        return res.status(400).send({ error: 'El código de vivienda ya existe. Intente nuevamente.' + err.message });
+    }
     //Crear una vivienda
     try{
     let housing = HousingSchema({
@@ -47,14 +51,10 @@ router.post('/housing', async (req, res) => {
     await housing.save();
     res.status(201).send(housing);
 } catch (err) {
-    if (err.code === 11000 && err.keyPattern && err.keyPattern.code) {
-        // Si el código está duplicado
-        return res.status(400).send({ error: 'El código de vivienda ya existe. Intente nuevamente.' });
-    } else {
-        res.status(500).send({ error: 'Error al crear vivienda: ' + err.message });
+  res.status(500).send({ error: 'Error al crear vivienda: ' + err.message });
     }
 }
-});
+);
 
 router.patch('/housing/:code', (req, res) => {
     //Actualizar una casa
