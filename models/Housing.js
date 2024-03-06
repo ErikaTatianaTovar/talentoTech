@@ -3,9 +3,7 @@ const mongoose = require('mongoose') // Importando la libreria
 // Creando el modelo de housing
 const HousingSchema = new mongoose.Schema({
     code: {
-        type: String,
-        // required: true,
-        // unique: true
+        type: String
     },
     type: {
         type: String,
@@ -36,8 +34,8 @@ const HousingSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator: async function (city) {
-                // Validacion del departamento
-                var response = await fetch('https://api-colombia.com/api/v1/Department');
+                // Validacion de ciudad
+                var response = await fetch('https://api-colombia.com/api/v1/City');
                 var cities = await response.json()
                 return cities.some(object => object.name.toUpperCase().includes(city.toUpperCase()));
             },

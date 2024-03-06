@@ -5,7 +5,7 @@ const express = require('express');
 const router = express.Router();
 const HousingSchema = require('../models/Housing');
 const multer = require('multer');
-//const {HousingController,upload} = require('../controllers/HousingController');//Importando el controllador
+const CodeGenerator = require('../controllers/CodeGenerator');
 
 
 router.get('/housing', async (req, res) => {
@@ -32,18 +32,17 @@ router.post('/housing', async (req, res) => {
     //Crear una vivienda
     try{
     let housing = HousingSchema({
+        code: CodeGenerator.generateUniqueCode(),
         type: req.body.type,
         state: req.body.state,
         city: req.body.city,
         address: req.body.address,
         zip_code: req.body.zip_code,
         price: req.body.price,
-        size: req.body.size,
+        size: req.body.size,    
         rooms: req.body.rooms,
         bathrooms: req.body.bathrooms,
-        parking: req.body.parking,
-        code: req.body.code
-        //image: req.body.image
+        parking: req.body.parking
     })
     await housing.save();
     res.status(201).send(housing);
