@@ -13,7 +13,7 @@ router.get('/housing', async (req, res) => {
     await HousingSchema.find().then((housing) => {
         res.json(housing)
     }).catch((err) => {
-        res.send({ "status": "error", "message": err.message })
+        res.status(500).send({ "status": "error", "message": err.message })
     })
 })
 
@@ -24,14 +24,14 @@ router.get('/housing/:code', async (req, res) => {
     await HousingSchema.findOne({ code: code }).then((housing) => {
         res.json(housing)
     }).catch((err) => {
-        res.send({ "status": "error", "message": err.message })
+        res.status(500).send({ "status": "error", "message": err.message })
     })
 })
 
 router.post('/housing', async (req, res) => {
     const existingHousing = await HousingSchema.findOne({ code: CodeGenerator.generateUniqueCode() });
     if (existingHousing) {
-        return res.status(400).send({ error: 'El código de vivienda ya existe. Intente nuevamente.' + err.message });
+        return res.status(400).send({ err: 'El código de vivienda ya existe. Intente nuevamente.' + err.message });
     }
     //Crear una vivienda
     try{
@@ -51,14 +51,12 @@ router.post('/housing', async (req, res) => {
     await housing.save();
     res.status(201).send(housing);
 } catch (err) {
-  res.status(500).send({ error: 'Error al crear vivienda: ' + err.message });
+  res.status(500).send({ err: 'Error al crear vivienda: ' + err.message });
     }
 }
 );
 
 router.patch('/housing/:code', (req, res) => {
-    //Actualizar una casa
-    // Cuando viene por la url del servicio web params
     var code = req.params.code
 
     let updateHousing = {
@@ -75,10 +73,10 @@ router.patch('/housing/:code', (req, res) => {
         image: req.body.image
     }
     HousingSchema.findOneAndUpdate({ code: code }, updateHousing, { new: true }).then((result) => {
-        res.send({ result, "status": "success", "message": "Vivienda actualizada con éxito" })
-    }).catch((error) => {
-        console.log(error)
-        res.send("Error actualizando el registro: " + error.message)
+        res.status(200).send({ result, "status": "success", "message": "Vivienda actualizada con éxito" })
+    }).catch((err) => {
+        console.log(err)
+        res.status(500).send("Error actualizando el registro: " + err.message)
     })
 })
 
@@ -87,10 +85,9 @@ router.delete('/housing/:code', (req, res) => {
     var code = req.params.code
 
     HousingSchema.deleteOne({ code: code }).then(() => {
-        res.json({ "status": "success", "message": "Vivienda eliminada correctamente" })
-    }).catch((error) => {
-        console.log(error)
-        res.json({ "status": "failed", "message": "Error eliminando vivienda" + err.message })
+        res.status(200).json({ "status": "success", "message": "Vivienda eliminada correctamente" })
+    }).catch((err) => {
+        res.status(500).json({ "status": "failed", "message": "Error eliminando vivienda" + err.message })
     })
 })
 
@@ -128,10 +125,10 @@ router.post('/upload/:code/housing', upload.single('file'), (req, res) => {
     }
 
     HousingSchema.findOneAndUpdate({ code: code }, updateHousing, { new: true }).then((result) => {
-        res.send({ "status": "success", "message": "Archivo subido correctamente" + result })
+        res.status(200).send({ "status": "success", "message": "Archivo subido correctamente" + result })
     }).catch((error) => {
         console.log(error)
-        res.send({ "status": "error", "message": "Error actualizando el registro" })
+        res.status(500).send({ "status": "error", "message": "Error actualizando el registro" })
     })
 
 })

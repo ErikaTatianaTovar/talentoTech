@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">26.92% </span>
+                <span class="strong">33.96% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/52</span>
+                <span class='fraction'>18/53</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">5.26% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>1/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">26.92% </span>
+                <span class="strong">33.96% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/52</span>
+                <span class='fraction'>18/53</span>
             </div>
         
             
@@ -201,29 +201,17 @@
 <a name='L136'></a><a href='#L136'>136</a>
 <a name='L137'></a><a href='#L137'>137</a>
 <a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a>
-<a name='L140'></a><a href='#L140'>140</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L139'></a><a href='#L139'>139</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -235,10 +223,18 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,7 +245,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -348,7 +346,7 @@ const express = require('express');
 const router = express.Router();
 const HousingSchema = require('../models/Housing');
 const multer = require('multer');
-//const {HousingController,upload} = require('../controllers/HousingController');//Importando el controllador
+const CodeGenerator = require('../controllers/CodeGenerator');
 &nbsp;
 &nbsp;
 router.get('/housing', <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
@@ -371,24 +369,23 @@ router.get('/housing/:code', <span class="fstat-no" title="function not covered"
     })
 })
 &nbsp;
-router.post('/housing', <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
+router.post('/housing', async (req, res) =&gt; {
     //Crear una vivienda
-<span class="cstat-no" title="statement not covered" >    try{</span>
-    let housing = <span class="cstat-no" title="statement not covered" >HousingSchema({</span>
+    try{
+    let housing = HousingSchema({
+        code: CodeGenerator.generateUniqueCode(),
         type: req.body.type,
         state: req.body.state,
         city: req.body.city,
         address: req.body.address,
         zip_code: req.body.zip_code,
         price: req.body.price,
-        size: req.body.size,
+        size: req.body.size,    
         rooms: req.body.rooms,
         bathrooms: req.body.bathrooms,
-        parking: req.body.parking,
-        code: req.body.code
-        //image: req.body.image
+        parking: req.body.parking
     })
-<span class="cstat-no" title="statement not covered" >    await housing.save();</span>
+    await housing.save();
 <span class="cstat-no" title="statement not covered" >    res.status(201).send(housing);</span>
 } catch (err) {
 <span class="cstat-no" title="statement not covered" >    if (err.code === 11000 &amp;&amp; err.keyPattern &amp;&amp; err.keyPattern.code) {</span>
@@ -487,7 +484,7 @@ module.exports = router;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-02T00:29:25.054Z
+                at 2024-03-06T20:14:44.286Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

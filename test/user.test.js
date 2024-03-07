@@ -12,7 +12,7 @@ const objectToTest = {
 let userId;
 let token;
 
-/*describe('GET /', () => {
+describe('GET /', () => {
     it('responds with status 200', async () => {
         //solicitud get en ruta principal
         const response = await request(app).get('/');
@@ -28,24 +28,17 @@ let token;
         expect(response.text).toBe('Hello world');
     });
 
-    it('responds with status 200', async () => {
-        //solicitud get en ruta principal
-        const response = await request(app).get('/user');
-        expect(response.status).toBe(200);
-    });
 })
 
-describe('GET /', () => {
+describe('GET /user', () => {
     it('responds with an array object that contains an specific user', async () => {
         //solicitud get en ruta principal
         const response = await request(app).get('/user');
         expect(response.status).toBe(200);
        //verificar que sea un array
-       // expect(Array.isArray(response.body)).toBE(true);
-        //verificar que contenga ese usuario
-        expect(response.body).toEqual(expect.arrayContaining([objectToTest]));
+       expect(Array.isArray(response.body)).toBE(true);
     });
-})*/
+})
 describe('POST /user', () => {
     it('create a new in the BD and response with the data ', async() => {
 
@@ -62,9 +55,8 @@ describe('POST /user', () => {
         expect(response.body.email).toBe(objectToTest.email)
     })
 })
-/*    describe('GET /user/:id', () => {
+  describe('GET /user/:id', () => {
     it('responds with an object that contains an specific user', async () => {
-        jest.setTimeout(30000);
         //solicitud get en ruta principal
         const response = await request(app).get('/user/' + userId);
        
@@ -109,5 +101,5 @@ describe('POST /delete', () => {
         expect(response.statusCode).toBe(200)
         expect(response.body.status).toBe('status')
     })
-})*/
+})
 

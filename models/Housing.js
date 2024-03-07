@@ -63,14 +63,32 @@ const HousingSchema = new mongoose.Schema({
     size: {
         type: Number,
         required: true,
+        validate: {
+            validator: function (size) {
+                return /^(10000|[1-9]\d|\d)$/.test(size);
+            },
+            message: props => `${props.value} no es un tamaño válido!`
+        }
     },
     rooms: {
         type: Number,
         required: true,
+        validate: {
+            validator: function (rooms) {
+                return /^(100|[1-9]\d|\d)$/.test(rooms);
+            },
+            message: props => `${props.value} no es un numero de habitaciones válido!`
+        }
     },
     bathrooms: {
         type: Number,
         required: true,
+        validate: {
+            validator: function (bathrooms) {
+                return /^(100|[1-9]\d|\d)$/.test(bathrooms);
+            },
+            message: props => `${props.value} no es un numero de baños válido!`
+        }
     },
     parking: {
         type: Boolean,

@@ -73,7 +73,7 @@ app.use('/', housingRoutes)
 app.use('/', messageRoutes)
 app.use('/', departmentRoutes)
 http.listen(port, () => {
-    console.log('Listen on ' + port)
+   // console.log('Listen on ' + port)
 })
 
 module.exports = http
