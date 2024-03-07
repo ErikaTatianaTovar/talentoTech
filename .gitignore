@@ -1,8 +1,3 @@
-# Ignorar el archivo .env en la raíz del repositorio
 .env
-
-# Ignorar el archivo urlmongo.txt en la raíz del repositorio
 urlmongo.txt
-
-# Ignorar el archivo coverage.js en la raíz del repositorio
-coverage.js
+coverage
