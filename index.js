@@ -6,6 +6,10 @@ const port = 3000; // Escuchar la ejecucion del servidor
 require('dotenv').config()
 //web sokets
 const socket = require('socket.io') // importar libreria de socket.io
+
+const cors = require('cors') // import
+app.use(cors());
+
 const http = require('http').Server(app) //configurar servidor http
 const io = socket(http) // Configuracion de socket.io
 
