@@ -28,48 +28,46 @@ router.get("/user/:id", async (req, res) => {
 
 router.post("/user", async (req, res) => {
   //Crear un usuario
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-  await bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
-    if (err) {
-      res.send({ status: "error", message: err.message });
-    } else {
-      let user = UserSchema({
-        name: req.body.name,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        id: req.body.id,
-        password: hashedPassword,
-      });
-
-      user
-        .save()
-        .then((result) => {
-          res.send(result);
-        })
-        .catch((err) => {
-          if (err.code == 11000) {
-            res.send({
-              status: "error",
-              message: "El usuario ya fue registrado",
-            });
-          } else {
-            res.send({ status: "error", message: err.message });
-          }
-        });
-    }
+  let user = UserSchema({
+    name: req.body.name,
+    lastname: req.body.lastname,
+    email: req.body.email,
+    id: req.body.id,
+    password: hashedPassword,
   });
+
+  user
+    .save()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      if (err.code == 11000) {
+        res.send({ status: "error", message: "El correo ya fue registrado" });
+      } else {
+        res.send({ status: "error", message: err.message });
+      }
+    });
 });
 
-router.patch("/user/:id", (req, res) => {
+router.patch("/user/:id", userController.validateToken, async (req, res) => {
   //Actualizar un usuario
   // Cuando viene por la url del servicio web params
   var id = req.params.id;
+
+  let hashedPassword;
+  if (req.body.password) {
+    hashedPassword = await bcrypt.hash(req.body.password, 10);
+  }
 
   // Cuando viene por el body se usa body
   var updateUser = {
     name: req.body.name,
     lastname: req.body.lastname,
     email: req.body.email,
+    password: hashedPassword,
     id: req.body.id,
   };
 
@@ -83,7 +81,7 @@ router.patch("/user/:id", (req, res) => {
     });
 });
 
-router.delete("/user/:id", (req, res) => {
+router.delete("/user/:id", userController.validateToken, (req, res) => {
   var id = req.params.id;
 
   //Puedo establecer cualquier parametro para eliminar
