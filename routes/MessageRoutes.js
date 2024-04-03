@@ -3,14 +3,14 @@ const router = express.Router();
 const MessageSchema = require("../models/Message");
 
 router.get("/messages", async (req, res) => {
-  let messages = await MessageSchema.findOne()
+  let messages = await MessageSchema.find()
     .populate({
       path: "from",
       select: "-password",
     })
     .populate({
       path: "to",
-      elect: "-password",
+      select: "-password",
     });
   res.json(messages);
 });
