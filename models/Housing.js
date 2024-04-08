@@ -99,7 +99,7 @@ const HousingSchema = new mongoose.Schema({
     },
   },
   parking: {
-    type: Boolean,
+    type: Number,
     required: true,
   },
   image: {
