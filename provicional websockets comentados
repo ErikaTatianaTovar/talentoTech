@@ -1,7 +1,7 @@
 const express = require("express"); //Importo la libreria
 const app = express(); //Inicializacion de la variable que usara la libreria
 const router = express.Router(); // Enrutar los servicios web
-const port = process.env.PORT || 3000; // Escuchar la ejecucion del servidor
+const port = process.env.PORT||3000; // Escuchar la ejecucion del servidor
 //variable de entorno
 require("dotenv").config();
 //web sokets
@@ -9,7 +9,7 @@ require("dotenv").config();
 
 const cors = require("cors"); // import
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: 'http://localhost:5173'
 };
 
 app.use(cors(corsOptions));
@@ -40,35 +40,38 @@ router.get("/", (req, res) => {
   res.send("Hello world");
 });
 
+
 //!NOTE: disabled Websocket
 /** Metodos websocket */
 //io.on("connect", (socket) => {
-// console.log("connected");
-//Escuchando eventos desde el servidor
-// socket.on("message", (data) => {
-/** Almacenando el mensaje en la BD */
-//  var payload = JSON.parse(data);
-// console.log(payload);
-/** Lo almaceno en la BD */
-//  MessageSchema(payload)
-//  .save()
-//  .then((result) => {
-/** Enviando el mensaje a todos los clientes conectados al websocket */
-//    socket.broadcast.emit("message-receipt", result);
-//  })
-//   .catch((err) => {
-// console.log({ status: "error", message: err.message });
-//   });
-// });
+ // console.log("connected");
+  //Escuchando eventos desde el servidor
+ // socket.on("message", (data) => {
+    /** Almacenando el mensaje en la BD */
+  //  var payload = JSON.parse(data);
+   // console.log(payload);
+    /** Lo almaceno en la BD */
+  //  MessageSchema(payload)
+    //  .save()
+    //  .then((result) => {
+        /** Enviando el mensaje a todos los clientes conectados al websocket */
+    //    socket.broadcast.emit("message-receipt", result);
+    //  })
+   //   .catch((err) => {
+       // console.log({ status: "error", message: err.message });
+   //   });
+ // });
 
-// socket.on("disconnect", (socket) => {
-//  console.log("disconnect");
-// });
+ // socket.on("disconnect", (socket) => {
+  //  console.log("disconnect");
+ // });
 //});
+
 
 /** Configuraciones express */
 app.use(express.urlencoded({ extended: true })); // Acceder a la informacion de las urls
 app.use(express.json()); // Analizar informacion en formato JSON
+
 
 //!NOTE: disabled Websocket
 //app.use((req, res, next) => {

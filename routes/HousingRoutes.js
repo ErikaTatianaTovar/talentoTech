@@ -47,7 +47,7 @@ router.post("/housing", (req, res) => {
       bathrooms: req.body.bathrooms,
       parking: req.body.parking,
     });
-      housing.save();
+    housing.save();
     res.status(201).send(housing);
   } catch (err) {
     res.status(500).send({ err: "Error al crear vivienda: " + err.message });
@@ -72,13 +72,11 @@ router.patch("/housing/:code", (req, res) => {
   };
   HousingSchema.findOneAndUpdate({ code: code }, updateHousing, { new: true })
     .then((result) => {
-      res
-        .status(200)
-        .send({
-          result,
-          status: "success",
-          message: "Vivienda actualizada con éxito",
-        });
+      res.status(200).send({
+        result,
+        status: "success",
+        message: "Vivienda actualizada con éxito",
+      });
     })
     .catch((err) => {
       console.log(err);
@@ -91,20 +89,16 @@ router.delete("/housing/:code", (req, res) => {
 
   HousingSchema.deleteOne({ code: code })
     .then(() => {
-      res
-        .status(200)
-        .json({
-          status: "success",
-          message: "Vivienda eliminada correctamente",
-        });
+      res.status(200).json({
+        status: "success",
+        message: "Vivienda eliminada correctamente",
+      });
     })
     .catch((err) => {
-      res
-        .status(500)
-        .json({
-          status: "failed",
-          message: "Error eliminando vivienda" + err.message,
-        });
+      res.status(500).json({
+        status: "failed",
+        message: "Error eliminando vivienda" + err.message,
+      });
     });
 });
 
@@ -144,12 +138,10 @@ router.post("/upload/:code/housing", upload.single("file"), (req, res) => {
 
   HousingSchema.findOneAndUpdate({ code: code }, updateHousing, { new: true })
     .then((result) => {
-      res
-        .status(200)
-        .send({
-          status: "success",
-          message: "Archivo subido correctamente" + result,
-        });
+      res.status(200).send({
+        status: "success",
+        message: "Archivo subido correctamente" + result,
+      });
     })
     .catch((error) => {
       console.log(error);
