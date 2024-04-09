@@ -8,7 +8,11 @@ require("dotenv").config();
 //const socket = require("socket.io"); // importar libreria de socket.io
 
 const cors = require("cors"); // import
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:5173'
+};
+
+app.use(cors(corsOptions));
 
 const http = require("http").Server(app); //configurar servidor http
 //!NOTE: disabled Websocket

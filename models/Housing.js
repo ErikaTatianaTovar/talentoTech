@@ -68,7 +68,7 @@ const HousingSchema = new mongoose.Schema({
     },
   },
   size: {
-    type: Number,
+    type: Double,
     required: true,
     validate: {
       validator: function (size) {
