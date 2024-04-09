@@ -48,7 +48,7 @@ router.post("/housing", async (req, res) => {
     let housing = HousingSchema({
       code: CodeGenerator.generateUniqueCode(),
       type: req.body.type,
-      state: req.body.state,
+      department: req.body.department,
       city: req.body.city,
       address: req.body.address,
       zip_code: req.body.zip_code,
@@ -70,7 +70,7 @@ router.patch("/housing/:code", (req, res) => {
 
   let updateHousing = {
     type: req.body.type,
-    state: req.body.state,
+    department: req.body.department,
     city: req.body.city,
     address: req.body.address,
     zip_code: req.body.zip_code,

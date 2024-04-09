@@ -15,18 +15,18 @@ const HousingSchema = new mongoose.Schema({
       message: (props) => `${props.value} no es un tipo de vivienda válido!`,
     },
   },
-  state: {
+  department: {
     type: String,
     required: true,
     validate: {
-      validator: async function (state) {
+      validator: async function (department) {
         // Validacion del departamento
         var response = await fetch(
           "https://api-colombia.com/api/v1/Department"
         );
         var departments = await response.json();
         return departments.some((department) =>
-          department.name.toUpperCase().includes(state.toUpperCase())
+          department.name.toUpperCase().includes(department.toUpperCase())
         );
       },
       message: (props) => "$(props.value) no es un Departamento de Colombia!",

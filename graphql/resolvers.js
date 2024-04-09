@@ -143,8 +143,8 @@ const resolvers = {
         if (filter.type) {
           query.type = { $regex: filter.type, $options: "i" };
         }
-        if (filter.state) {
-          query.state = { $regex: filter.state, $options: "i" };
+        if (filter.department) {
+          query.department = { $regex: filter.department, $options: "i" };
         }
         if (filter.city) {
           query.city = { $regex: filter.city, $options: "i" };

@@ -6,7 +6,7 @@ let createdHousingCode;
 
 const objectToTest = {
   type: "finca",
-  state: "Bogotá",
+  department: "Bogotá",
   city: "Bogotá",
   address: "Prueba1",
   zip_code: 110010,
@@ -26,7 +26,7 @@ describe("POST /housing", () => {
     expect(response.statusCode).toBe(201);
     expect(response.body).toHaveProperty("code");
     expect(response.body.type).toBe(objectToTest.type);
-    expect(response.body.state).toBe(objectToTest.state);
+    expect(response.body.department).toBe(objectToTest.department);
     expect(response.body.city).toBe(objectToTest.city);
     expect(response.body.address).toBe(objectToTest.address);
     expect(response.body.zip_code).toBe(objectToTest.zip_code);
@@ -79,7 +79,7 @@ describe("GET /housing/:code", () => {
     expect(typeof response.body === "object").toBe(true);
     expect(response.body).toHaveProperty("code");
     expect(response.body.type).toBe(objectToTest.type);
-    expect(response.body.state).toBe(objectToTest.state);
+    expect(response.body.department).toBe(objectToTest.department);
     expect(response.body.city).toBe(objectToTest.city);
     expect(response.body.address).toBe(objectToTest.address);
     expect(response.body.zip_code).toBe(objectToTest.zip_code);
@@ -112,7 +112,7 @@ describe("PATCH /housing/:code", () => {
   });
   it("error update specific object", async () => {
     const InvalidUpdateObject = {
-      state: "assdsf",
+      department: "assdsf",
       city: "ssfsafas",
       zip_code: "110010",
       size: "abc",

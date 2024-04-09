@@ -40,7 +40,7 @@ const Housing = new GraphQLObjectType({
     _id: { type: GraphQLID },
     address: { type: GraphQLString },
     city: { type: GraphQLString },
-    state: { type: GraphQLString },
+    department: { type: GraphQLString },
     size: { type: GraphQLInt },
     type: { type: GraphQLString },
     zip_code: { type: GraphQLString },
@@ -75,7 +75,7 @@ const HousingFilterInput = new GraphQLInputObjectType({
   fields: {
     address: { type: GraphQLString },
     city: { type: GraphQLString },
-    state: { type: GraphQLString },
+    department: { type: GraphQLString },
     size: { type: GraphQLInt },
     type: { type: GraphQLString },
     zip_code: { type: GraphQLString },
