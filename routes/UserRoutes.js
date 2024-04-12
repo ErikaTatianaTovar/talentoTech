@@ -4,11 +4,10 @@ const bcrypt = require("bcrypt");
 const UserSchema = require("../models/User");
 const UserController = require("../controllers/UserController"); //Importando el controllador
 const userController = new UserController(); // creando una instancia de ese controlador
-const multer = require("multer");
+const multer = require('multer');
 
-router.get(
-  "/user",
-  /* userController.validateToken,*/ async (req, res) => {
+router.get( "/user",
+   userController.validateToken, async (req, res) => {
     //Traer todos los usuarios
     let users = await UserSchema.find();
     res.json(users);
@@ -160,7 +159,7 @@ router.post("/upload/:id/user", upload.single("file"), (req, res) => {
 
   UserSchema.findByIdAndUpdate(id, updateUser, { new: true })
     .then((result) => {
-      res.send({ status: "success", message: "Archivo subido correctamente" });
+      res.send({ status: "success", message: "Archivo subido correctamente" + result });
     })
     .catch((error) => {
       console.log(error);

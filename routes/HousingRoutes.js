@@ -1,6 +1,3 @@
-//preguntar al profesor si es mejor usar un put o un post para agregar en bd y cual es la diferencia
-//el codigo sea de cuatro letras y cuatro numeros y lo genere automaticamente
-
 const express = require("express");
 const router = express.Router();
 const HousingSchema = require("../models/Housing");
@@ -67,8 +64,7 @@ router.patch("/housing/:code", (req, res) => {
     size: req.body.size,
     rooms: req.body.rooms,
     bathrooms: req.body.bathrooms,
-    parking: req.body.parking,
-    image: req.body.image,
+    parking: req.body.parking
   };
   HousingSchema.findOneAndUpdate({ code: code }, updateHousing, { new: true })
     .then((result) => {
@@ -133,7 +129,7 @@ router.post("/upload/:code/housing", upload.single("file"), (req, res) => {
   var code = req.params.code;
 
   var updateHousing = {
-    avatar: req.file.path,
+    image: req.file.path,
   };
 
   HousingSchema.findOneAndUpdate({ code: code }, updateHousing, { new: true })
@@ -147,7 +143,7 @@ router.post("/upload/:code/housing", upload.single("file"), (req, res) => {
       console.log(error);
       res
         .status(500)
-        .send({ status: "error", message: "Error actualizando el registro" });
+        .send({ status: "error", message: "Error actualizando el registro" + error.message });
     });
 });
 

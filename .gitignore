@@ -2,3 +2,4 @@
 urlmongo.txt
 coverage
 .vercel
+node_modules
