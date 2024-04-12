@@ -90,8 +90,8 @@ app.use("/", departmentRoutes);
 
 //!NOTE: disabled Websocket
 //http -> app
-http.listen(port, () => {
+/*http.listen(port, () => {
    console.log('Listen on ' + port)
-});
+});*/
 
 module.exports = http;
