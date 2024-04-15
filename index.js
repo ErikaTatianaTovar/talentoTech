@@ -2,19 +2,12 @@ const express = require("express"); //Importo la libreria
 const app = express(); //Inicializacion de la variable que usara la libreria
 const router = express.Router(); // Enrutar los servicios web
 const port = process.env.PORT || 3000; // Escuchar la ejecucion del servidor
-//variable de entorno
-require("dotenv").config();
-//web sokets
+const http = require('http').Server(app);
+const path = require('path')
+const cors = require('cors')
 //const socket = require("socket.io"); // importar libreria de socket.io
 
-const cors = require("cors"); // import
-const corsOptions = {
-  origin: "http://localhost:5173",
-};
-
-app.use(cors(corsOptions));
-
-const http = require("http").Server(app); //configurar servidor http
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 //!NOTE: disabled Websocket
 //const io = socket(http); // Configuracion de socket.io
 
@@ -26,19 +19,26 @@ const DB_URL = process.env.DB_URL || "";
 const mongoose = require("mongoose"); // Importo la libreria mongoose
 mongoose.connect(DB_URL); // Creo la cadena de conexion
 
+const db = mongoose.connection;
+db.on('error', (error) => {
+  console.error('Error de conexión a la base de datos:', error);
+});
+db.once('open', () => {
+  console.log('Conexión exitosa a la base de datos');
+});
+
+router.get('/', (req, res) => {
+  res.send('Hello world');
+})
+
+app.use(cors())
+app.use(express.urlencoded({extended: true})) // Acceder a la informacion de las urls
+app.use(express.json()) // Analizar informacion en formato JSON
+
 const userRoutes = require("./routes/UserRoutes");
 const housingRoutes = require("./routes/HousingRoutes");
 const messageRoutes = require("./routes/MessageRoutes");
-const departmentRoutes = require("./read_file");
 
-const MessageSchema = require("./models/Message");
-
-//Metodo [GET, POST, PUT, PATCH, DELETE]
-// Nombre del servicio [/]
-router.get("/", (req, res) => {
-  //Informacion a modificar
-  res.send("Hello world");
-});
 
 //!NOTE: disabled Websocket
 /** Metodos websocket */
@@ -65,12 +65,6 @@ router.get("/", (req, res) => {
 //  console.log("disconnect");
 // });
 //});
-
-/** Configuraciones express */
-app.use(express.urlencoded({ extended: true })); // Acceder a la informacion de las urls
-app.use(express.json()); // Analizar informacion en formato JSON
-
-//!NOTE: disabled Websocket
 //app.use((req, res, next) => {
 //  res.io = io;
 ////  next();
@@ -86,12 +80,9 @@ app.use("/", userRoutes);
 app.use("/uploads/housing", express.static("uploads/housing"));
 app.use("/", housingRoutes);
 app.use("/", messageRoutes);
-app.use("/", departmentRoutes);
 
-//!NOTE: disabled Websocket
-//http -> app
-/*http.listen(port, () => {
-   console.log('Listen on ' + port)
-});*/
+app.listen(port, () => {
+  console.log('Listen on http://localhost:' + port)
+})
 
 module.exports = http;
