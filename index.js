@@ -31,8 +31,24 @@ router.get('/', (req, res) => {
   res.send('Hello world');
 })
 
-app.use(cors())
+app.use(cors({
+    origin: (origin, callback) => {
+      const ACCEPTED_ORIGINS = [
+  'https://talento-tech-l6lqcddm6-erika-tovars-projects.vercel.app'
+]
+if (ACCEPTED_ORIGINS.includes(origin)){
+  return callback(null, true)
+}
+if (!origin) {
+  return callback(null, true)
+}
+return callback(new Error('Not allowed by CORS'))
+    },
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+  }));
+
 app.use(express.urlencoded({extended: true})) // Acceder a la informacion de las urls
+
 app.use(express.json()) // Analizar informacion en formato JSON
 
 const userRoutes = require("./routes/UserRoutes");
