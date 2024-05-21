@@ -34,7 +34,7 @@ router.get('/', (req, res) => {
 app.use(cors({
     origin: (origin, callback) => {
       const ACCEPTED_ORIGINS = [
-  'https://talento-tech-l6lqcddm6-erika-tovars-projects.vercel.app'
+  'https://talento-tech-kappa.vercel.app'
 ]
 if (ACCEPTED_ORIGINS.includes(origin)){
   return callback(null, true)
